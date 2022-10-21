@@ -62,9 +62,9 @@ build {
     inline = [
       "set -xe",
       "sleep 30",
-      "DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o DPkg::Lock::Timeout=300 update",
-      "DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o DPkg::Lock::Timeout=300 upgrade",
-      "DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o DPkg::Lock::Timeout=300 install --no-install-recommends git awscli",
+      "sudo apt-get -y -o DPkg::Lock::Timeout=300 update",
+      "sudo apt-get -y -o DPkg::Lock::Timeout=300 upgrade",
+      "sudo apt-get -y -o DPkg::Lock::Timeout=300 install --no-install-recommends git awscli jq curl",
       "git config --global user.name 'CarbonROM Webview CI Bot'",
       "git config --global user.email 'carbonrom_webview_ci_bot@mcswain.dev'",
       "git config --global pack.threads '0'",
