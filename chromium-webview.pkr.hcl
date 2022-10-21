@@ -23,14 +23,16 @@ source "amazon-ebs" "ubuntu" {
   ssh_username = "ubuntu"
 
   aws_polling {
-    delay_seconds = 30
-    max_attempts  = 80
+    delay_seconds = 60
+    max_attempts  = 120
   }
 
   launch_block_device_mappings {
     device_name = "/dev/xvda"
     volume_size = 75
-    volume_type = "gp2"
+    volume_type = "gp3"
+    throughput  = 500
+    iops        = 10000
   }
 
   ena_support = true
@@ -53,7 +55,7 @@ build {
       "sleep 30",
       "DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o DPkg::Lock::Timeout=300 update",
       "DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o DPkg::Lock::Timeout=300 upgrade",
-      "DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o DPkg::Lock::Timeout=300 install --no-install-recommends git awscli pigz",
+      "DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o DPkg::Lock::Timeout=300 install --no-install-recommends git awscli",
       "git config --global user.name 'CarbonROM Webview CI Bot'",
       "git config --global user.email 'carbonrom_webview_ci_bot@mcswain.dev'",
       "git config --global pack.threads '0'",
@@ -69,9 +71,8 @@ build {
       "sudo chmod 777 /mnt/md0",
       "git clone --progress https://github.com/CarbonROM/android_external_chromium-webview.git -b cr-11.0 /mnt/md0/chromium-webview",
       "cd /mnt/md0/chromium-webview && ./build-webview.sh -s -b",
-      "echo \"Uncompressed size is `du -sh /mnt/md0/chromium-webview | awk '{ print $1 }'`\"",
-      "tar --use-compress-program=\"pigz -k \" -cf /mnt/src/chromium-webview.tar.gz /mnt/md0/chromium-webview",
-      "echo \"Compressed size is `du -bh /mnt/src/chromium-webview.tar.gz | awk '{ print $1 }'`\"",
+      "mv -v /mnt/md0/chromium-webview /mnt/src/chromium-webview",
+      "echo \"Size is `du -sh /mnt/src/chromium-webview | awk '{ print $1 }'`\"",
       "sync"
     ]
   }
