@@ -28,14 +28,23 @@ source "amazon-ebs" "ubuntu" {
   }
 
   launch_block_device_mappings {
-    device_name = "/dev/xvda"
-    volume_size = 75
-    volume_type = "gp3"
-    throughput  = 500
-    iops        = 10000
+    device_name           = "/dev/sda1"
+    volume_size           = 8
+    volume_type           = "gp3"
+    iops                  = 3000
+    throughput            = 125
+    delete_on_termination = true
   }
 
-  ena_support = true
+  launch_block_device_mappings {
+    device_name           = "/dev/xvda"
+    volume_size           = 100
+    volume_type           = "io2"
+    iops                  = 30000
+    delete_on_termination = true
+  }
+
+  ena_support             = true
   ami_virtualization_type = "hvm"
 }
 
@@ -60,18 +69,12 @@ build {
       "git config --global user.email 'carbonrom_webview_ci_bot@mcswain.dev'",
       "git config --global pack.threads '0'",
       "git config --global pack.windowMemory '1300m'",
-      "sudo mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/nvme2n1 /dev/nvme3n1",
-      "sudo mkfs.ext4 -F /dev/md0",
       "sudo mkfs.ext4 -F /dev/nvme1n1",
       "sudo mkdir -p /mnt/src",
-      "sudo mkdir -p /mnt/md0",
       "sudo mount /dev/nvme1n1 /mnt/src",
-      "sudo mount /dev/md0 /mnt/md0",
       "sudo chmod 777 /mnt/src",
-      "sudo chmod 777 /mnt/md0",
-      "git clone --progress https://github.com/CarbonROM/android_external_chromium-webview.git -b cr-11.0 /mnt/md0/chromium-webview",
-      "cd /mnt/md0/chromium-webview && ./build-webview.sh -s -b",
-      "mv -v /mnt/md0/chromium-webview /mnt/src/chromium-webview",
+      "git clone --progress https://github.com/CarbonROM/android_external_chromium-webview.git -b cr-11.0 /mnt/src/chromium-webview",
+      "cd /mnt/src/chromium-webview && ./build-webview.sh -s -b",
       "echo \"Size is `du -sh /mnt/src/chromium-webview | awk '{ print $1 }'`\"",
       "sync"
     ]
