@@ -64,7 +64,7 @@ build {
       "sleep 30",
       "sudo apt-get -y -o DPkg::Lock::Timeout=300 update",
       "sudo apt-get -y -o DPkg::Lock::Timeout=300 upgrade",
-      "sudo apt-get -y -o DPkg::Lock::Timeout=300 install --no-install-recommends git awscli jq curl",
+      "sudo apt-get -y -o DPkg::Lock::Timeout=300 install --no-install-recommends git awscli jq curl fpart",
       "git config --global user.name 'CarbonROM Webview CI Bot'",
       "git config --global user.email 'carbonrom_webview_ci_bot@mcswain.dev'",
       "git config --global pack.threads '0'",
