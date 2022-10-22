@@ -20,6 +20,12 @@ jobs:
           arguments: -syntax-only
           target: chromium-webview.pkr.hcl
 
+      - name: Init
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: init
+          target: chromium-webview.pkr.hcl
+
       # build artifact
       - name: Build Artifact
         uses: hashicorp/packer-github-actions@master
