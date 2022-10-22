@@ -40,7 +40,7 @@ source "amazon-ebs" "ubuntu" {
     device_name           = "/dev/xvda"
     volume_size           = 100
     volume_type           = "io2"
-    iops                  = 30000
+    iops                  = 25000
     delete_on_termination = true
   }
 
